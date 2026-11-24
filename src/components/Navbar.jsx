@@ -1,17 +1,40 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 function Navbar({ favouriteCount }) {
   return (
-    <nav className="navbar">
-      <Link to="/" className="nav-brand">
-        📖 Recipe Book
-      </Link>
-      <div className="nav-links">
-        <Link to="/">Home</Link>
-        <Link to="/recipes">Recipes</Link>
-        <Link to="/favourites">Favourites ({favouriteCount})</Link>
+    <header className="site-header">
+      <div className="nav-container">
+        <Link to="/" className="brand-logo">
+          <span className="logo-icon">🍳</span>
+          <span className="logo-text">RecipeBook</span>
+        </Link>
+
+        <nav className="nav-menu">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/recipes"
+            className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
+          >
+            All Recipes
+          </NavLink>
+          <NavLink
+            to="/favourites"
+            className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
+          >
+            Favourites
+            {favouriteCount > 0 && (
+              <span className="badge-count">{favouriteCount}</span>
+            )}
+          </NavLink>
+        </nav>
       </div>
-    </nav>
+    </header>
   );
 }
 

@@ -10,28 +10,31 @@ import Favourites from "./pages/Favourites";
 function App() {
   const [recipes, setRecipes] = useState(initialRecipes);
 
-  const toggleFavourite = (id) => {
-    setRecipes((prevRecipes) =>
-      prevRecipes.map((recipe) =>
-        recipe.id === id
-          ? { ...recipe, isFavourite: !recipe.isFavourite }
-          : recipe
+  function handleToggleFavourite(recipeId) {
+    setRecipes((currentList) =>
+      currentList.map((item) =>
+        item.id === recipeId
+          ? { ...item, isFavourite: !item.isFavourite }
+          : item
       )
     );
-  };
+  }
 
-  const favouriteCount = recipes.filter((r) => r.isFavourite).length;
+  const favouriteCount = recipes.filter((item) => item.isFavourite).length;
 
   return (
     <BrowserRouter>
       <Navbar favouriteCount={favouriteCount} />
-      <main className="container">
+      <main className="main-content">
         <Routes>
           <Route path="/" element={<Home recipes={recipes} />} />
           <Route
             path="/recipes"
             element={
-              <Recipes recipes={recipes} onToggleFavourite={toggleFavourite} />
+              <Recipes
+                recipes={recipes}
+                onToggleFavourite={handleToggleFavourite}
+              />
             }
           />
           <Route
@@ -39,7 +42,7 @@ function App() {
             element={
               <RecipeDetails
                 recipes={recipes}
-                onToggleFavourite={toggleFavourite}
+                onToggleFavourite={handleToggleFavourite}
               />
             }
           />
@@ -48,7 +51,7 @@ function App() {
             element={
               <Favourites
                 recipes={recipes}
-                onToggleFavourite={toggleFavourite}
+                onToggleFavourite={handleToggleFavourite}
               />
             }
           />

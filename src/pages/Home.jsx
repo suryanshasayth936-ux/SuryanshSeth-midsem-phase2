@@ -1,36 +1,52 @@
 import { Link } from "react-router";
 
 function Home({ recipes }) {
-  const totalRecipes = recipes.length;
-  const vegRecipes = recipes.filter((r) => r.type === "Veg").length;
-  const favouriteRecipes = recipes.filter((r) => r.isFavourite).length;
+  const total = recipes.length;
+  const vegCount = recipes.filter((item) => item.type === "Veg").length;
+  const favCount = recipes.filter((item) => item.isFavourite).length;
 
   return (
-    <div className="home">
-      <h1>Recipe Book</h1>
-      <p className="intro">
-        Browse recipes by cuisine, cooking time, and dietary type, and save your
-        favourites for quick access.
-      </p>
+    <div className="home-view">
+      <section className="welcome-banner">
+        <h1 className="banner-title">Delicious Recipes Made Simple</h1>
+        <p className="banner-text">
+          Explore quick weeknight dinners, authentic traditional dishes, and your
+          own curated collection of favourite meals.
+        </p>
+        <div className="banner-actions">
+          <Link to="/recipes" className="action-button primary">
+            Explore All Recipes
+          </Link>
+          <Link to="/favourites" className="action-button secondary">
+            View Favourites ({favCount})
+          </Link>
+        </div>
+      </section>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <h2>{totalRecipes}</h2>
-          <p>Total Recipes</p>
-        </div>
-        <div className="stat-card">
-          <h2>{vegRecipes}</h2>
-          <p>Veg Recipes</p>
-        </div>
-        <div className="stat-card">
-          <h2>{favouriteRecipes}</h2>
-          <p>Favourite Recipes</p>
-        </div>
-      </div>
+      <section className="stats-section">
+        <h2 className="section-title">At a Glance</h2>
+        <div className="dashboard-grid">
+          <div className="dashboard-card">
+            <span className="card-digit">{total}</span>
+            <span className="card-title">Available Recipes</span>
+          </div>
 
-      <Link to="/recipes" className="btn-primary">
-        Explore Recipes
-      </Link>
+          <div className="dashboard-card">
+            <span className="card-digit">{vegCount}</span>
+            <span className="card-title">Vegetarian Dishes</span>
+          </div>
+
+          <div className="dashboard-card">
+            <span className="card-digit">{total - vegCount}</span>
+            <span className="card-title">Non-Veg Dishes</span>
+          </div>
+
+          <div className="dashboard-card">
+            <span className="card-digit">{favCount}</span>
+            <span className="card-title">Saved in Favourites</span>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

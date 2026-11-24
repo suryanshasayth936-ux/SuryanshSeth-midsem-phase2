@@ -1,47 +1,53 @@
 import { Link } from "react-router";
 
 function RecipeCard({ recipe, onToggleFavourite }) {
-  const isVeg = recipe.type === "Veg";
-
   return (
-    <div className="card">
-      <div className="card-header">
-        <span className="emoji">{recipe.emoji}</span>
-        <div className="badges">
-          <span className={`badge ${isVeg ? "badge-veg" : "badge-nonveg"}`}>
-            {isVeg ? "Veg" : "Non-Veg"}
+    <article className="recipe-card">
+      <div className="card-media">
+        <span className="recipe-icon" role="img" aria-label={recipe.name}>
+          {recipe.emoji}
+        </span>
+        <div className="pill-group">
+          <span className={`tag-pill ${recipe.type === "Veg" ? "is-veg" : "is-nonveg"}`}>
+            {recipe.type}
           </span>
           {recipe.cookingTime <= 20 && (
-            <span className="badge badge-quick">Quick</span>
+            <span className="tag-pill is-quick">⚡ Fast</span>
           )}
         </div>
       </div>
 
-      <h3>{recipe.name}</h3>
-      <p className="meta">
-        <strong>Cuisine:</strong> {recipe.cuisine}
-      </p>
-      <p className="meta">
-        <strong>Cooking Time:</strong> {recipe.cookingTime} min
-      </p>
-      <p className="meta">
-        <strong>Difficulty:</strong> {recipe.difficulty}
-      </p>
+      <div className="card-body">
+        <h3 className="recipe-heading">{recipe.name}</h3>
 
-      <div className="card-actions">
+        <ul className="recipe-meta-list">
+          <li>
+            <span className="meta-label">Cuisine:</span> {recipe.cuisine}
+          </li>
+          <li>
+            <span className="meta-label">Time:</span> {recipe.cookingTime} mins
+          </li>
+          <li>
+            <span className="meta-label">Difficulty:</span> {recipe.difficulty}
+          </li>
+        </ul>
+      </div>
+
+      <div className="card-footer">
         <button
-          className={`btn-fav ${recipe.isFavourite ? "active" : ""}`}
+          type="button"
+          className={`favourite-btn ${recipe.isFavourite ? "is-active" : ""}`}
           onClick={() => onToggleFavourite(recipe.id)}
+          aria-label={recipe.isFavourite ? "Remove from favourites" : "Save to favourites"}
         >
-          {recipe.isFavourite
-            ? "❤ Remove from Favourites"
-            : "♡ Add to Favourites"}
+          {recipe.isFavourite ? "Saved" : "Save"}
         </button>
-        <Link to={`/recipes/${recipe.id}`} className="btn-details">
-          View Details
+
+        <Link to={`/recipes/${recipe.id}`} className="details-link">
+          View Recipe
         </Link>
       </div>
-    </div>
+    </article>
   );
 }
 

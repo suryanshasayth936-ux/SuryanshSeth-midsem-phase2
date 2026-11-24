@@ -2,81 +2,100 @@ import { useParams, Link } from "react-router";
 
 function RecipeDetails({ recipes, onToggleFavourite }) {
   const { id } = useParams();
-  const recipe = recipes.find((r) => String(r.id) === String(id));
+  const currentRecipe = recipes.find((item) => String(item.id) === String(id));
 
-  if (!recipe) {
+  if (!currentRecipe) {
     return (
-      <div className="details-container">
-        <h2>Recipe not found</h2>
-        <Link to="/recipes" className="btn-details">
-          ← Back to Recipes
+      <div className="missing-recipe-card">
+        <h2>Recipe Not Found</h2>
+        <p>Sorry, we could not locate any recipe with this identifier.</p>
+        <Link to="/recipes" className="action-button secondary">
+          ← Back to All Recipes
         </Link>
       </div>
     );
   }
 
-  const isVeg = recipe.type === "Veg";
-  const ingredients = recipe.ingredients || [];
-
   return (
-    <div className="details-container">
-      <Link to="/recipes" className="back-link">
+    <div className="details-view">
+      <Link to="/recipes" className="navigation-back-link">
         ← Back to Recipes
       </Link>
 
-      <div className="details-header">
-        <span className="emoji-large">{recipe.emoji}</span>
-        <div>
-          <h1>{recipe.name}</h1>
-          <div className="badges">
-            <span className={`badge ${isVeg ? "badge-veg" : "badge-nonveg"}`}>
-              {isVeg ? "Veg" : "Non-Veg"}
+      <div className="details-hero-panel">
+        <div className="hero-emoji-wrap">
+          <span className="hero-emoji">{currentRecipe.emoji}</span>
+        </div>
+
+        <div className="hero-content">
+          <div className="pill-group">
+            <span
+              className={`tag-pill ${
+                currentRecipe.type === "Veg" ? "is-veg" : "is-nonveg"
+              }`}
+            >
+              {currentRecipe.type}
             </span>
-            {recipe.cookingTime <= 20 && (
-              <span className="badge badge-quick">Quick</span>
+            {currentRecipe.cookingTime <= 20 && (
+              <span className="tag-pill is-quick">⚡ Fast</span>
             )}
           </div>
+
+          <h1 className="hero-recipe-name">{currentRecipe.name}</h1>
+          {currentRecipe.description && (
+            <p className="hero-recipe-desc">{currentRecipe.description}</p>
+          )}
         </div>
       </div>
 
-      <div className="details-meta">
-        <p>
-          <strong>Cuisine:</strong> {recipe.cuisine}
-        </p>
-        <p>
-          <strong>Cooking Time:</strong> {recipe.cookingTime} min
-        </p>
-        <p>
-          <strong>Difficulty:</strong> {recipe.difficulty}
-        </p>
-      </div>
-
-      {recipe.description && <p className="description">{recipe.description}</p>}
-
-      <div className="ingredients-section">
-        <h3>Ingredients ({ingredients.length} ingredients)</h3>
-        <ul>
-          {ingredients.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      </div>
-
-      {recipe.instructions && (
-        <div className="instructions-section">
-          <h3>Instructions</h3>
-          <p>{recipe.instructions}</p>
+      <div className="specs-strip">
+        <div className="spec-item">
+          <span className="spec-title">Cuisine</span>
+          <span className="spec-detail">{currentRecipe.cuisine}</span>
         </div>
-      )}
+        <div className="spec-item">
+          <span className="spec-title">Cooking Time</span>
+          <span className="spec-detail">{currentRecipe.cookingTime} mins</span>
+        </div>
+        <div className="spec-item">
+          <span className="spec-title">Difficulty</span>
+          <span className="spec-detail">{currentRecipe.difficulty}</span>
+        </div>
+      </div>
 
-      <button
-        className={`btn-fav ${recipe.isFavourite ? "active" : ""}`}
-        onClick={() => onToggleFavourite(recipe.id)}
-      >
-        {recipe.isFavourite
-          ? "❤ Remove from Favourites"
-          : "♡ Add to Favourites"}
-      </button>
+      <div className="recipe-guide-grid">
+        <section className="guide-card">
+          <h3 className="guide-heading">
+            Ingredients ({currentRecipe.ingredients?.length || 0})
+          </h3>
+          <ul className="ingredient-items">
+            {(currentRecipe.ingredients || []).map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </section>
+
+        {currentRecipe.instructions && (
+          <section className="guide-card">
+            <h3 className="guide-heading">Preparation Instructions</h3>
+            <p className="instruction-paragraph">{currentRecipe.instructions}</p>
+          </section>
+        )}
+      </div>
+
+      <div className="details-bottom-bar">
+        <button
+          type="button"
+          className={`favourite-btn large ${
+            currentRecipe.isFavourite ? "is-active" : ""
+          }`}
+          onClick={() => onToggleFavourite(currentRecipe.id)}
+        >
+          {currentRecipe.isFavourite
+            ? "❤️ Remove from Favourites"
+            : "🤍 Save to Favourites"}
+        </button>
+      </div>
     </div>
   );
 }
